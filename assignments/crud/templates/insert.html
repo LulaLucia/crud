@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block nav %}
+
+{% block main_content %}
+<h1>Insert Movie</h1>
+
+<br>
+
+<div class="box">
+<!-- change to post later -->
+<form action="/insert/" method="GET">
+
+<label for="kind">Movie Data</label>
+
+<p><label>(i) Movie ID/TT: <input type="text" id="query" name="query" required></label></p>
+<p><label>(t) Movie Title: <input type="text" id="query" name="query" required></label></p>
+<p><label>(r) Movie Release Year: <input type="text" id="query" name="query" required></label></p>
+   
+<button type="submit">Insert Movie</button>   
+</form>
+</div>
+
+
+{% endblock %}

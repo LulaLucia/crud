@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+
+{% block main_content %}
+<h1>Update Movie</h1>
+
+
+
+<div class="box">
+<!-- change to post later -->
+<form action="/update/" method="GET">
+
+<label for="kind">Use "None" or "null" to set a field to null. Only Title, Release Year, and Director can be null.</label>
+
+<p><label>Title: <input type="text" id="query" name="query" ></label></p>
+<p><label>Movie ID: <input type="text" id="query" name="query" required></label></p>
+<p><label>Release Year: <input type="text" id="query" name="query" ></label></p>
+<p><label>Added by: <input type="text" id="query" name="query" required></label></p>
+<p><label>Director ID: <input type="text" id="query" name="query" ></label></p>
+<p><label>Director: <input type="text" id="query" name="query" disabled></label></p>
+   
+<button type="submit">Insert Movie</button>   
+</form>
+</div>
+
+
+
+{% endblock %}
