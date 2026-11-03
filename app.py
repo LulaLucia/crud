@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 import secrets
 import cs304dbi as dbi
+import query
 
 # we need a secret_key to use flash() and sessions
 app.secret_key = secrets.token_hex()
@@ -15,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('ww123_db'))
+print(dbi.conf('ll118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -32,10 +33,22 @@ def about():
 
 @app.route('/search/', methods=['GET', 'POST'])
 def search_by_title():
-    if request.method == 'GET':
-        return render_template('search.html', page_title='Search by Title')
-    else:
-        return redirect(url_for('update'))
+    search_text = request.args.get('search', '')
+
+    with dbi.connect() as conn: 
+
+        if request.method == 'GET':
+            search = query.search_by_title(conn, search_text)
+            return render_template('search.html', page_title='Search by Title', results=search)
+            
+        else:
+            return redirect(url_for('update'))
+
+
+
+
+
+
 
 @app.route('/insert/')
 def insert_movie():
@@ -63,5 +76,3 @@ if __name__ == '__main__':
         port = os.getuid()
     app.debug = True
     app.run('0.0.0.0',port)
-
-    #hi

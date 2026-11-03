@@ -8,9 +8,18 @@
 
 <label>Title <input type="text" id="query" name="query" required></label>
 
-   
  <button type="submit">Search</button>   
 </form>
+
+
+{% for movie in results %} 
+    {% if movie.title in search_text %}
+        <p>{{ movie.title }}</p>
+    {% else %}
+        <p>No movies found.</p>
+    {% endif %}
+{% endfor %}
+
 
 
 {% endblock %}
