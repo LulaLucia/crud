@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('ll118_db'))
+print(dbi.conf('cm118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -31,19 +31,15 @@ def about():
     return render_template('about.html', page_title='About Us')
 
 
-@app.route('/search/', methods=['GET', 'POST'])
+@app.route('/search/', methods=['GET'])
 def search_by_title():
-    search_text = request.args.get('search', '')
+    search = request.args.get('search', '')
 
     with dbi.connect() as conn: 
-
-        if request.method == 'GET':
-            search = query.search_by_title(conn, search_text)
-            return render_template('search.html', page_title='Search by Title', results=search)
+           movie_results = query.search_by_title(conn, search)
+    return render_template('search.html', page_title='Search by Title', results=movie_results, search_text= search)
             
-        else:
-            return redirect(url_for('update'))
-
+        
 
 
 

@@ -6,20 +6,19 @@
 {% block main_content %}
 <h1>Search by Title</h1>
 
-<form action="/search/" method="GET">
+<form action= "{{url_for('search_by_title')}}" method="GET" >
 
-<label>Title <input type="text" id="query" name="query" required></label>
+<label>Title <input type="text" id="search" name="search" required></label>
 
  <button type="submit">Search</button>   
 </form>
 
 
 {% for movie in results %} 
-    {% if movie.title in search_text %}
+    
         <p>{{ movie.title }}</p>
-    {% else %}
-        <p>No movies found.</p>
-    {% endif %}
+
+        
 {% endfor %}
 
 
