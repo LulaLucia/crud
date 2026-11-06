@@ -37,18 +37,26 @@ def search_by_title():
 
     with dbi.connect() as conn: 
            movie_results = query.search_by_title(conn, search)
+        
     return render_template('search.html', page_title='Search by Title', results=movie_results, search_text= search)
             
         
 
 
-
-
-
-
-@app.route('/insert/')
+@app.route('/insert/', methods= ['GET', 'POST'])
 def insert_movie():
-    return render_template('insert.html', page_title='Insert Movie')
+    id= ""
+    title = ""
+    year= ""
+    
+    if request.method == 'POST': 
+        id = request.form.get('movie_id')
+        title = request.form.get('movie_title')
+        year = request.form.get('release_year')
+
+        flash('movie added')
+        return redirect(url_for('insert_movie'))
+    return render_template('insert.html', page_title='Insert Movie', id=id, title=title, year= year)
 
 @app.route('/select/')
 def select_incomplete_movies():
