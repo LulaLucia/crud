@@ -19,6 +19,12 @@ def select_incomplete_movies(conn):
         return curs.fetchall()
 
 
+def check_movie_exists(conn, movie_tt):
+    '''check movies by tt'''
+    with dbi.dict_cursor(conn) as curs:
+        curs.execute('''SELECT tt from movie where tt= %s''', [movie_tt] )
+        row= curs.fetchone()
+        return row is not None
 
 if __name__ == '__main__':
     dbi.conf('ll118_db')
