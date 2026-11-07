@@ -14,6 +14,12 @@
 
     <option value="">Choose a movie:</option>
 
+    <ul>
+        {% for movie in incomplete_movies %}
+            <li><option value="{{ movie[0] }}">{{ movie[1] }}</option></li>
+        {% endfor %}
+    </ul>
+    
     </select>
 
 <button type="submit">Insert Movie</button>   

@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('cm118_db'))
+print(dbi.conf('ll118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -40,19 +40,21 @@ def search_by_title():
     return render_template('search.html', page_title='Search by Title', results=movie_results, search_text= search)
             
         
-
-
-
-
-
-
 @app.route('/insert/')
 def insert_movie():
     return render_template('insert.html', page_title='Insert Movie')
 
-@app.route('/select/')
+
+@app.route('/select/', methods=['GET'])
 def select_incomplete_movies():
-    return render_template('select.html', page_title='Select from Incomplete Movies')
+    with dbi.connect() as conn:
+        incomplete_movies = query.select_incomplete_movies(conn)
+    return render_template('select.html', page_title='Select from Incomplete Movies', incomplete_movies=incomplete_movies)
+
+
+
+
+
 
 @app.route('/update/<int:tt>')
 def update(tt):
