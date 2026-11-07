@@ -12,6 +12,12 @@ def search_by_title(conn, search_text):
         return curs.fetchall()
 
 
+def check_movie_exists(conn, movie_tt):
+    '''check movies by tt'''
+    with dbi.dict_cursor(conn) as curs:
+        curs.execute('''SELECT tt from movie where tt= %s''', [movie_tt] )
+        row= curs.fetchone()
+        return row is not None
 
 if __name__ == '__main__':
     dbi.conf('cm118_db')

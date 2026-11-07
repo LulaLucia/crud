@@ -8,18 +8,33 @@
 
 <div class="box">
 <!-- change to post later -->
-<form action="/update/" method="GET">
+<form action="{{url_for('update_movie', movie_id = movie.tt)}}" method="POST">
 
 <label for="kind">Use "None" or "null" to set a field to null. Only Title, Release Year, and Director can be null.</label>
 
-<p><label>Title: <input type="text" id="query" name="query" ></label></p>
-<p><label>Movie ID: <input type="text" id="query" name="query" required></label></p>
-<p><label>Release Year: <input type="text" id="query" name="query" ></label></p>
-<p><label>Added by: <input type="text" id="query" name="query" required></label></p>
-<p><label>Director ID: <input type="text" id="query" name="query" ></label></p>
-<p><label>Director: <input type="text" id="query" name="query" disabled></label></p>
+<p>
+    <label>Title: 
+        <input type="text" name="movie_title" value = "{{movie.title if movie else ''}}" >
+    </label> </p>
+<p>
+    <label>Movie ID: 
+        <input type="text" name="movie_id" value="{{movie.tt if movie else ''}}" required></label></p>
+
+<p><label>Release Year: 
+    <input type="text" name="year" value = "{{movie.release if movie else ''}}" ></label></p>
+
+<p><label>Added by: 
+    <input type="text" name="addedby" value = "{{movie.addedby if movie else 'None'}}" 
+    required></label></p>
+
+<p><label>Director ID: 
+    <input type="text" name="director_id" value="{{movie.director_id if movie else 'None'}}"></label></p>
+
+<p><label>Director: <input type="text"  name="director" value= "{{movie.director if movie.director else 'None specified' }}" disabled></label></p>
    
-<button type="submit">Insert Movie</button>   
+<button type="submit" name="action" value="update">Update</button>   
+<button type="submit" name="action" value="delete">Delete</button>   
+
 </form>
 </div>
 

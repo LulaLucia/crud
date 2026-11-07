@@ -54,17 +54,63 @@ def insert_movie():
         title = request.form.get('movie_title')
         year = request.form.get('release_year')
 
+        with dbi.connect() as conn:
+            if query.check_movie_exists(conn,id):
+                flash(f'error: movie exists; Movie with tt = {id} is already in database.')
+                return redirect(url_for('update_movie', movie_id= id, title=title, year=year)) #update here so that it redirects it to update movie
+            with dbi.dict_cursor(conn) as curs:
+                curs.execute('''Insert INTO movie(tt,title, `release`)
+                VALUES (%s, %s, %s)''', [id, title, year])
+                conn.commit()
+
         flash('movie added')
-        return redirect(url_for('insert_movie'))
+        return redirect(url_for('update_movie', movie_id= id))
     return render_template('insert.html', page_title='Insert Movie', id=id, title=title, year= year)
 
 @app.route('/select/')
 def select_incomplete_movies():
     return render_template('select.html', page_title='Select from Incomplete Movies')
 
-@app.route('/update/<int:tt>')
-def update(tt):
-    return render_template('update.html', page_title='Update Movie Details')
+@app.route('/update/<int:movie_id>', methods= ['GET', 'POST'])
+def update_movie(movie_id):
+    with dbi.connect() as conn:
+                    with dbi.dict_cursor(conn) as curs: 
+                        curs.execute('''Select movie.tt,movie. title, movie.`release`, movie.addedby, movie.director as director_id, person.name as director 
+                                    from movie
+                                        left join person on movie.director= person.nm where movie.tt = %s''', [movie_id])
+                        movie_data = curs.fetchone()
+                      
+                        if movie_data is None:
+                            flash(f"Movie with tt = {movie_id} does not exist")
+                            return redirect(url_for('insert_movie'))
+
+    # movie_data['tt']= movie_id
+    # movie_data['title'] = request.args.get('title')
+    # movie_data['release'] = request.args.get('year')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action =="delete":
+             deleted_title = movie_data['title']
+             with dbi.connect() as conn:
+                  with dbi.dict_cursor(conn) as curs:
+                       curs.execute('''Delete from movie where tt = %s''', [movie_id])
+                       conn.commit()
+                       flash(f'Movie "{deleted_title}" deleted succesfully')
+                       return redirect(url_for('insert_movie'))
+
+        elif action == 'update':
+            new_title = request.form.get('movie_title')
+            new_year = request.form.get('year')
+            with dbi.connect() as conn:
+                with dbi.dict_cursor(conn) as curs:
+                          curs.execute('''UPDATE movie set title = %s, `release` = %s WHERE tt= %s''',[ new_title, new_year, movie_id])
+                          conn.commit()
+                          flash(f'Movie "{new_title}" updated')
+                          return redirect(url_for('insert_movie'))
+                
+    return render_template('update.html', page_title='Update Movie Details', movie=movie_data)
 
 
 
