@@ -1,25 +1,37 @@
 {% extends "base.html" %}
 
-{% block nav %}
 
 {% block main_content %}
 <h1>Insert Movie</h1>
+
 
 <br>
 
 <div class="box">
 <!-- change to post later -->
-<form action="/insert/" method="GET">
+<form action="{{url_for('insert_movie')}}" method= "post">
 
 <label for="kind">Movie Data</label>
 
-<p><label>(i) Movie ID/TT: <input type="text" id="query" name="query" required></label></p>
-<p><label>(t) Movie Title: <input type="text" id="query" name="query" required></label></p>
-<p><label>(r) Movie Release Year: <input type="text" id="query" name="query" required></label></p>
-   
+<p> 
+<label for= "movie_id"> (i) Movie ID/TT: </label>
+<input type="number" id="movie_id" name="movie_id" required></label> </p>
+<label for="title">(t) Movie Title: </label>
+<input type="text" id="title" name="movie_title" required>
+
+<p>
+<label for= "year"> (r) Movie Release Year:</label> 
+<input type="number" id="year" name="release_year" required> </p>
+
+
 <button type="submit">Insert Movie</button>   
 </form>
 </div>
+
+
+
+
+
 
 <!-- hi -->
  <!-- change to post later -->

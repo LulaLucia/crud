@@ -6,23 +6,23 @@
 <br>
 
 <div class="box">
-<!-- change to post later -->
-<form action="/select/" method="GET">
+<!-- change to post later
+-->
+<form action="{{ url_for('update') }}" method="GET">
 
     <label for = "dropdown">Movies without release dates or directors: </label>
+
     <select id="dropdown" name="drop">
+        <option value="">Choose an incomplete movie:</option>
 
-    <option value="">Choose a movie:</option>
-
-    <ul>
-        {% for movie in incomplete_movies %}
-            <li><option value="{{ movie[0] }}">{{ movie[1] }}</option></li>
-        {% endfor %}
-    </ul>
     
+    {% for movie in incomplete_movies %}
+        <option value="{{ movie.tt }}">{{ movie.title }}</option>
+    {% endfor %}
+
     </select>
 
-<button type="submit">Insert Movie</button>   
+    <button type="submit">Insert Movie</button>   
 </form>
 </div>
 

@@ -5,7 +5,9 @@ import cs304dbi as dbi
 def search_by_title(conn, search_text):
     ''' return title, movieID, release year, added by, director ID, director from wmdb '''
     with dbi.dict_cursor(conn) as curs:
-        curs.execute('''SELECT * FROM movie where title like %s''', ['%' +search_text + '%'])
+        curs.execute('''SELECT movie.title, movie.tt, movie.`release`, movie.addedby, person.nm, person.name, movie.director
+        from movie 
+        left join person ON movie.director = person.nm where title like %s ''', ['%' +search_text + '%'])
         
         return curs.fetchall()
 
