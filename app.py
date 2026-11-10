@@ -37,7 +37,6 @@ def search_by_title():
 
     with dbi.connect() as conn: 
            movie_results = query.search_by_title(conn, search)
-        
     return render_template('search.html', page_title='Search by Title', results=movie_results, search_text= search)
     
 
@@ -57,6 +56,7 @@ def insert_movie():
             if query.check_movie_exists(conn,id):
                 flash(f'error: movie exists; Movie with tt = {id} is already in database.')
                 return redirect(url_for('update_movie', movie_id= id, title=title, year=year)) #update here so that it redirects it to update movie
+
             with dbi.dict_cursor(conn) as curs:
                 curs.execute('''Insert INTO movie(tt,title, `release`)
                 VALUES (%s, %s, %s)''', [id, title, year])
