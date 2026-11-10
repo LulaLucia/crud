@@ -1,6 +1,7 @@
 # Lula & Cami
 import cs304dbi as dbi
-
+from flask import (Flask, render_template, make_response, url_for, request,
+                   redirect, flash, session, send_from_directory, jsonify)
 
 def search_by_title(conn, search_text):
     ''' return title, movieID, release year, added by, director ID, director from wmdb '''
@@ -27,8 +28,31 @@ def check_movie_exists(conn, movie_tt):
         return row is not None
 
 
+def delete_movie(conn, movie_id):
+    with dbi.dict_cursor(conn) as curs:
+        curs.execute('''Delete from movie where tt = %s''', [movie_id])
+        conn.commit()
+        
+
+def update_movie(conn, movie_id):
+    new_title = request.form.get('movie_title')
+    new_year = request.form.get('year')
+    new_addedby = request.form.get('addedby')
+    new_director_id = request.form.get('director_id')
+
+    if new_director_id  == 'none': 
+        new_director_id= None
+    else: 
+        new_director_id = new_director_id 
+
+    with dbi.dict_cursor(conn) as curs:
+            curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
+            flash(f'Movie "{new_title}" updated')
+            conn.commit()
+                                  
+
 if __name__ == '__main__':
-    dbi.conf('ll118_db')
+    dbi.conf('cm118_db')
     with dbi.connect() as conn:
         sr = search_by_title(conn, 'hey')
         for movie in sr:
