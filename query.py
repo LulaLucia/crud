@@ -38,15 +38,14 @@ def update_movie(conn, movie_id):
     new_title = request.form.get('movie_title')
     new_year = request.form.get('year')
     new_addedby = request.form.get('addedby')
-    new_director_id = request.form.get('director_id')
-
-    if new_director_id  == 'none': 
-        new_director_id= None
+    new_director = request.form.get('director_id')
+    if not new_director or new_director.strip().lower() == 'none': 
+        new_director_id = None
     else: 
-        new_director_id = new_director_id 
+        new_director_id = new_director
 
     with dbi.dict_cursor(conn) as curs:
-            curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
+            curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, movie.director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
             flash(f'Movie "{new_title}" updated')
             conn.commit()
                                   

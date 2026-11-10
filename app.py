@@ -109,7 +109,7 @@ def update_movie(movie_id):
             # new_addedby = request.form.get('addedby')
             # new_director_id = request.form.get('director_id')
             with dbi.connect() as conn:
-                movie = query.update_movie(conn, movie_id)
+                query.update_movie(conn, movie_id)
                 # with dbi.dict_cursor(conn) as curs:
                 #           curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
                 #           conn.commit()
