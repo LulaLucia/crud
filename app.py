@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('ll118_db'))
+print(dbi.conf('cm118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -105,15 +105,16 @@ def update_movie(movie_id):
 
         elif action == 'update':
             new_title = request.form.get('movie_title')
-            new_year = request.form.get('year')
-            new_addedby = request.form.get('addedby')
-            new_director_id = request.form.get('director_id')
+            # new_year = request.form.get('year')
+            # new_addedby = request.form.get('addedby')
+            # new_director_id = request.form.get('director_id')
             with dbi.connect() as conn:
-                with dbi.dict_cursor(conn) as curs:
-                          curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
-                          conn.commit()
-                          flash(f'Movie "{new_title}" updated')
-                          return redirect(url_for('insert_movie'))
+                movie = query.update_movie(conn, movie_id)
+                # with dbi.dict_cursor(conn) as curs:
+                #           curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
+                #           conn.commit()
+                #           flash(f'Movie "{new_title}" updated')
+                return redirect(url_for('insert_movie'))
                 
     return render_template('update.html', page_title='Update Movie Details', movie=movie_data)
 
