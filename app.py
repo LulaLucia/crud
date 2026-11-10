@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('cm118_db'))
+print(dbi.conf('ll118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -39,8 +39,7 @@ def search_by_title():
            movie_results = query.search_by_title(conn, search)
         
     return render_template('search.html', page_title='Search by Title', results=movie_results, search_text= search)
-            
-        
+    
 
 
 @app.route('/insert/', methods= ['GET', 'POST'])
@@ -67,9 +66,19 @@ def insert_movie():
         return redirect(url_for('update_movie', movie_id= id))
     return render_template('insert.html', page_title='Insert Movie', id=id, title=title, year= year)
 
-@app.route('/select/')
+
+@app.route('/select/', methods=['GET'])
 def select_incomplete_movies():
-    return render_template('select.html', page_title='Select from Incomplete Movies')
+    movie_id = request.args.get('drop', type =int)
+
+    if movie_id is not None:
+        return redirect(url_for('update_movie', movie_id=movie_id))
+    
+    with dbi.connect() as conn:
+        incomplete_movies = query.select_incomplete_movies(conn)
+
+    return render_template('select.html', page_title='Select from Incomplete Movies', incomplete_movies=incomplete_movies)
+
 
 @app.route('/update/<int:movie_id>', methods= ['GET', 'POST'])
 def update_movie(movie_id):
@@ -109,9 +118,6 @@ def update_movie(movie_id):
                           return redirect(url_for('insert_movie'))
                 
     return render_template('update.html', page_title='Update Movie Details', movie=movie_data)
-
-
-
 
 
 if __name__ == '__main__':
