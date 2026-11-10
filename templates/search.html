@@ -4,25 +4,37 @@
 
 {% block main_content %}
 <h1>Search by Title</h1>
+<h4>This page is just to search for movies, since it was not required for the
+  assignment, but we thought it would be fun to have just a simple search bar 
+  that delivers current results without an update page
+</h4>
 
-<form action= "{{url_for('search_by_title')}}" method="GET" >
+<form action= "{{url_for('search_by_title', search_text = search_text)}}" method="GET" >
 
 <label>Title <input type="text" id="search" name="search" required></label>
 
  <button type="submit">Search</button>   
 
+</form>
 
+{%if search_text %}
 {% for movie in results %} 
-    
-        <label for= "title"> Title: {{movie.title}} </label>
 
+      
+      <p> Title: {{movie.title}}</p>
        <p>Movie Id: {{ movie.tt}} </p>
         <p>Release year {{ movie.release }} </p>
          <p>Added by {{ movie.addedby }} </p>
        <p>Director ID: {{movie.director}} </p>
        <p>Director Name: {{movie.name}} </p>
 
-        
-{% endfor %}
+       {%else%}
+       <p> Movie not found </p>
+  {% endfor %}
+   
+
+{%endif%}      
+
+
 
 {% endblock %}
