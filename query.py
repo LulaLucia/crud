@@ -26,6 +26,14 @@ def check_movie_exists(conn, movie_tt):
         row= curs.fetchone()
         return row is not None
 
+
+def update_movie(conn, movie_id):
+    with dbi.dict_cursor(conn) as curs:
+        curs.execute('''Delete from movie where tt = %s''', [movie_id])
+        conn.commit()
+
+
+
 if __name__ == '__main__':
     dbi.conf('ll118_db')
     with dbi.connect() as conn:

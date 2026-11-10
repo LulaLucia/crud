@@ -84,7 +84,7 @@ def select_incomplete_movies():
 def update_movie(movie_id):
     with dbi.connect() as conn:
                     with dbi.dict_cursor(conn) as curs: 
-                        curs.execute('''Select movie.tt,movie. title, movie.`release`, movie.addedby, movie.director as director_id, person.name as director 
+                        curs.execute('''Select movie.tt,movie.title, movie.`release`, movie.addedby, movie.director as director_id, person.name as director 
                                     from movie
                                         left join person on movie.director= person.nm where movie.tt = %s''', [movie_id])
                         movie_data = curs.fetchone()
@@ -92,10 +92,6 @@ def update_movie(movie_id):
                         if movie_data is None:
                             flash(f"Movie with tt = {movie_id} does not exist")
                             return redirect(url_for('insert_movie'))
-
-    # movie_data['tt']= movie_id
-    # movie_data['title'] = request.args.get('title')
-    # movie_data['release'] = request.args.get('year')
 
     if request.method == 'POST':
         action = request.form.get('action')
@@ -112,9 +108,11 @@ def update_movie(movie_id):
         elif action == 'update':
             new_title = request.form.get('movie_title')
             new_year = request.form.get('year')
+            new_addedby = request.form.get('addedby')
+            new_director_id = request.form.get('director_id')
             with dbi.connect() as conn:
                 with dbi.dict_cursor(conn) as curs:
-                          curs.execute('''UPDATE movie set title = %s, `release` = %s WHERE tt= %s''',[ new_title, new_year, movie_id])
+                          curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
                           conn.commit()
                           flash(f'Movie "{new_title}" updated')
                           return redirect(url_for('insert_movie'))
