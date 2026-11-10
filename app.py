@@ -99,11 +99,9 @@ def update_movie(movie_id):
         if action =="delete":
              deleted_title = movie_data['title']
              with dbi.connect() as conn:
-                  with dbi.dict_cursor(conn) as curs:
-                       curs.execute('''Delete from movie where tt = %s''', [movie_id])
-                       conn.commit()
-                       flash(f'Movie "{deleted_title}" deleted succesfully')
-                       return redirect(url_for('insert_movie'))
+                  movie_deleted = query.delete_movie(conn, movie_id)
+                  flash(f'Movie "{deleted_title}" deleted succesfully')
+                  return redirect(url_for('insert_movie'))
 
         elif action == 'update':
             new_title = request.form.get('movie_title')
