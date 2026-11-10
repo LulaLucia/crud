@@ -15,7 +15,7 @@ def search_by_title(conn, search_text):
 def select_incomplete_movies(conn):
     ''' return title, movieID, release year, added by, director ID, director from wmdb '''
     with dbi.dict_cursor(conn) as curs:
-        curs.execute('''SELECT * FROM movie where director is null or `release` is null or addedby is null''')
+        curs.execute('''SELECT * FROM movie where director is null or `release` is null''')
         
         return curs.fetchall()
 
