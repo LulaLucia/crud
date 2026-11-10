@@ -44,6 +44,19 @@ def update_movie(conn, movie_id):
     else: 
         new_director_id = new_director
 
+    if new_addedby == 'None' or new_addedby == 'null':
+        new_addedby = None
+
+    elif new_addedby == "none" or new_addedby == "Null":
+        flash(f'addedby needs to be "None" or "null" exactly')
+        return redirect(url_for('update_movie', movie_id=movie_id))
+
+    else:
+        new_addedby = new_addedby.strip()
+
+
+
+
     with dbi.dict_cursor(conn) as curs:
             curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, movie.director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
             flash(f'Movie "{new_title}" updated')
