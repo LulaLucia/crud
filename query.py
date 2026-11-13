@@ -34,33 +34,35 @@ def delete_movie(conn, movie_id):
         conn.commit()
         
 
-def update_movie(conn, movie_id):
-    new_title = request.form.get('movie_title')
-    new_year = request.form.get('year')
-    new_addedby = request.form.get('addedby')
-    new_director = request.form.get('director_id')
-    if not new_director or new_director.strip().lower() == 'none': 
+def update_movie(conn, movie_id, new_tt): # CHANGED
+    new_title = request.form.get('movie-title')
+    new_year = request.form.get('movie-release')
+    new_addedby = request.form.get('movie-addedby')
+    new_director = request.form.get('director-id')
+
+    if not new_director or new_director.strip().lower() == 'none':
         new_director_id = None
-    else: 
+    else:
         new_director_id = new_director
 
     if new_addedby == 'None' or new_addedby == 'null':
         new_addedby = None
 
     elif new_addedby == "none" or new_addedby == "Null":
-        flash(f'addedby needs to be "None" or "null" exactly')
-        return redirect(url_for('update_movie', movie_id=movie_id))
-
-    else:
-        new_addedby = new_addedby.strip()
-
-
-
+        flash('addedby needs to be "None" or "null" exactly')
+        return False 
 
     with dbi.dict_cursor(conn) as curs:
-            curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, movie.director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
-            flash(f'Movie "{new_title}" updated')
-            conn.commit()
+        curs.execute('''
+            UPDATE movie
+            SET tt = %s, title = %s, `release` = %s,
+                addedby = %s, director = %s
+            WHERE tt = %s
+        ''', [new_tt, new_title, new_year, new_addedby, new_director_id, movie_id]) 
+
+        conn.commit()
+
+    return True
                                   
 
 if __name__ == '__main__':

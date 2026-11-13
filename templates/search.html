@@ -11,7 +11,7 @@
 
 <form action= "{{url_for('search_by_title', search_text = search_text)}}" method="GET" >
 
-<label>Title <input type="text" id="search" name="search" required></label>
+<label>Title <input type="text" id="search-title" name="search-title" required></label>
 
  <button type="submit">Search</button>   
 
@@ -23,8 +23,8 @@
       
       <p> Title: {{movie.title}}</p>
        <p>Movie Id: {{ movie.tt}} </p>
-        <p>Release year {{ movie.release }} </p>
-         <p>Added by {{ movie.addedby }} </p>
+        <p>Release year: {{ movie.release }} </p>
+         <p>Added by: {{ movie.addedby }} </p>
        <p>Director ID: {{movie.director}} </p>
        <p>Director Name: {{movie.name}} </p>
 

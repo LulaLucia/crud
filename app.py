@@ -33,7 +33,7 @@ def about():
 
 @app.route('/search/', methods=['GET'])
 def search_by_title():
-    search = request.args.get('search', '')
+    search = request.args.get('search-title', '')
 
     with dbi.connect() as conn: 
            movie_results = query.search_by_title(conn, search)
@@ -48,13 +48,13 @@ def insert_movie():
     year= ""
     
     if request.method == 'POST': 
-        id = request.form.get('movie_id')
-        title = request.form.get('movie_title')
-        year = request.form.get('release_year')
+        id = request.form.get('movie-tt')
+        title = request.form.get('movie-title')
+        year = request.form.get('movie-release')
 
         if not id or not title or not year:
             flash('Please fill in all fields')
-            return redirect(url_for('insert_movie'))
+            return render_template('insert.html')
 
 
         with dbi.connect() as conn:
@@ -77,7 +77,7 @@ def insert_movie():
 
 @app.route('/select/', methods=['GET'])
 def select_incomplete_movies():
-    movie_id = request.args.get('drop', type =int)
+    movie_id = request.args.get('menu-tt', type =int)
 
     if movie_id is not None:
         return redirect(url_for('update_movie', movie_id=movie_id))
@@ -105,25 +105,29 @@ def update_movie(movie_id):
         action = request.form.get('action')
 
         if action =="delete":
-             deleted_title = movie_data['title']
+             deleted_title = movie_data.get('title')
              with dbi.connect() as conn:
                   movie_deleted = query.delete_movie(conn, movie_id)
                   flash(f'Movie "{deleted_title}" deleted succesfully')
-                  return redirect(url_for('insert_movie'))
+                  return redirect(url_for('index'))
+
 
         elif action == 'update':
-            new_title = request.form.get('movie_title')
-            # new_year = request.form.get('year')
-            # new_addedby = request.form.get('addedby')
-            # new_director_id = request.form.get('director_id')
+            new_tt = int(request.form.get('movie-tt'))
+
             with dbi.connect() as conn:
-                query.update_movie(conn, movie_id)
-                # with dbi.dict_cursor(conn) as curs:
-                #           curs.execute('''UPDATE movie set title = %s, `release` = %s, addedby = %s, director = %s WHERE tt= %s''',[ new_title, new_year,  new_addedby, new_director_id, movie_id])
-                #           conn.commit()
-                #           flash(f'Movie "{new_title}" updated')
-                return redirect(url_for('insert_movie'))
-                
+                if new_tt != movie_id and query.check_movie_exists(conn, new_tt):
+                    flash(f'Error: Movie with tt = {new_tt} already exists.')
+                    return redirect(url_for('update_movie', movie_id=movie_id))
+
+                updated = query.update_movie(conn, movie_id, new_tt)
+
+            if not updated:
+                return redirect(url_for('update_movie', movie_id=movie_id)) 
+
+            flash('Movie updated successfully') 
+            return redirect(url_for('update_movie', movie_id=new_tt)) 
+
     return render_template('update.html', page_title='Update Movie Details', movie=movie_data)
 
 
