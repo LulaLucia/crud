@@ -8,7 +8,7 @@
 <div class="box">
 <!-- change to post later
 -->
-<form action="{{ url_for('select_incomplete_movies') }}" method="GET">
+<form action="{{ url_for('select_incomplete_movies') }}" method="POST">
 
     <label for = "dropdown">Movies without release dates or directors: </label>
 
@@ -22,7 +22,8 @@
 
     </select>
 
-    <button type="submit">Select Movie</button>   
+     <input type="submit" name= "submit" value= "Select" >   
+
 </form>
 </div>
 

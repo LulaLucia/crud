@@ -34,12 +34,9 @@ def delete_movie(conn, movie_id):
         conn.commit()
         
 
-def update_movie(conn, movie_id, new_tt): # CHANGED
-    new_title = request.form.get('movie-title')
-    new_year = request.form.get('movie-release')
-    new_addedby = request.form.get('movie-addedby')
-    new_director = request.form.get('movie-director')
-
+def update_movie(conn, movie_id, new_tt, new_title, new_year,
+                 new_addedby, new_director): # CHANGED
+    
     if not new_director or new_director.strip().lower() == 'none':
         new_director_id = None
     else:

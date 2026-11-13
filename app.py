@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('ll118_db'))
+print(dbi.conf('cm118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -75,9 +75,9 @@ def insert_movie():
     return render_template('insert.html', page_title='Insert Movie', id=id, title=title, year= year)
 
 
-@app.route('/select/', methods=['GET'])
+@app.route('/select/', methods = ['GET', 'POST'])
 def select_incomplete_movies():
-    movie_id = request.args.get('menu-tt', type =int)
+    movie_id = request.form.get('menu-tt', type =int)
 
     if movie_id is not None:
         return redirect(url_for('update_movie', movie_id=movie_id))
@@ -102,7 +102,7 @@ def update_movie(movie_id):
                             return redirect(url_for('insert_movie'))
 
     if request.method == 'POST':
-        action = request.form.get('action')
+        action = request.form.get('submit')
 
         if action =="delete":
              deleted_title = movie_data.get('title')
@@ -113,6 +113,11 @@ def update_movie(movie_id):
 
 
         elif action == 'update':
+            new_title = request.form.get('movie-title')
+            new_tt = request.form.get('movie-tt')
+            new_year = request.form.get('movie-release')
+            new_addedby = request.form.get('movie-addedby')
+            new_director = request.form.get('movie-director')
             new_tt = int(request.form.get('movie-tt'))
 
             with dbi.connect() as conn:
@@ -120,7 +125,8 @@ def update_movie(movie_id):
                     flash(f'Error: Movie with tt = {new_tt} already exists.')
                     return redirect(url_for('update_movie', movie_id=movie_id))
 
-                updated = query.update_movie(conn, movie_id, new_tt)
+                updated = query.update_movie(conn, movie_id, new_tt, new_title,
+            new_year, new_addedby, new_director)
 
             if not updated:
                 return redirect(url_for('update_movie', movie_id=movie_id)) 
