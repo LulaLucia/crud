@@ -38,7 +38,7 @@ def update_movie(conn, movie_id, new_tt): # CHANGED
     new_title = request.form.get('movie-title')
     new_year = request.form.get('movie-release')
     new_addedby = request.form.get('movie-addedby')
-    new_director = request.form.get('director-id')
+    new_director = request.form.get('movie-director')
 
     if not new_director or new_director.strip().lower() == 'none':
         new_director_id = None

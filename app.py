@@ -61,7 +61,7 @@ def insert_movie():
 
             
             if query.check_movie_exists(conn,id):
-                flash(f'error: movie exists; Movie with tt = {id} is already in database.')
+                flash(f'Movie already exists')
                 return redirect(url_for('update_movie', movie_id= id, title=title, year=year)) #update here so that it redirects it to update movie
 
             else:

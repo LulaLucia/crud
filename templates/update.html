@@ -28,12 +28,12 @@
     required></label></p>
 
 <p><label>Director ID: 
-    <input type="text" name="director-id" value="{{movie.director_id if movie else 'None'}}"></label></p>
+    <input type="text" name="movie-director" value="{{movie.director_id if movie else 'None'}}"></label></p>
 
-<p><label>Director: <input type="text"  name="director" value= "{{movie.director if movie.director else 'None specified' }}" disabled></label></p>
+<p><label>Director: <input type="text"  name="director-name" value= "{{movie.director if movie.director else 'None specified' }}" disabled></label></p>
    
-<button type="submit" name="action" value="update">Update</button>   
-<button type="submit" name="action" value="delete">Delete</button>   
+<button type="submit" name="submit" value="update">Update</button>   
+<button type="submit" name="submit" value="delete">Delete</button>   
 
 </form>
 </div>
