@@ -35,9 +35,9 @@ def delete_movie(conn, movie_id):
         
 
 def update_movie(conn, movie_id, new_tt, new_title, new_year,
-                 new_addedby, new_director): # CHANGED
+                 new_addedby, new_director): 
     
-    if not new_director or new_director.strip().lower() == 'none':
+    if not new_director or new_director.strip().lower() in ('none', 'null'):
         new_director_id = None
     else:
         new_director_id = new_director
@@ -63,7 +63,7 @@ def update_movie(conn, movie_id, new_tt, new_title, new_year,
                                   
 
 if __name__ == '__main__':
-    dbi.conf('cm118_db')
+    dbi.conf('ll118_db')
     with dbi.connect() as conn:
         sr = search_by_title(conn, 'hey')
         for movie in sr:

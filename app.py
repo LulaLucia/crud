@@ -16,7 +16,7 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('cm118_db'))
+print(dbi.conf('ll118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -54,7 +54,7 @@ def insert_movie():
 
         if not id or not title or not year:
             flash('Please fill in all fields')
-            return render_template('insert.html')
+            return render_template('insert.html', page_title = 'Insert Movie')
 
 
         with dbi.connect() as conn:
@@ -62,7 +62,7 @@ def insert_movie():
             
             if query.check_movie_exists(conn,id):
                 flash(f'Movie already exists')
-                return redirect(url_for('update_movie', movie_id= id, title=title, year=year)) #update here so that it redirects it to update movie
+                return redirect(url_for('update_movie', movie_id= id)) #update here so that it redirects it to update movie
 
             else:
                 with dbi.dict_cursor(conn) as curs:
@@ -122,17 +122,38 @@ def update_movie(movie_id):
 
             with dbi.connect() as conn:
                 if new_tt != movie_id and query.check_movie_exists(conn, new_tt):
-                    flash(f'Error: Movie with tt = {new_tt} already exists.')
-                    return redirect(url_for('update_movie', movie_id=movie_id))
+                    flash(f'Movie already exists')
+                    return render_template('update.html',
+                                           page_title='Update Movie Details',
+                                           movie=movie_data) 
 
                 updated = query.update_movie(conn, movie_id, new_tt, new_title,
-            new_year, new_addedby, new_director)
+                new_year, new_addedby, new_director)
+
+                if updated and new_tt == movie_id:
+                        with dbi.dict_cursor(conn) as curs:
+                            curs.execute('''
+                                SELECT movie.tt, movie.title, movie.`release`,
+                                    movie.addedby,
+                                    movie.director AS director_id,
+                                    person.name AS director
+                                FROM movie
+                                LEFT JOIN person ON movie.director = person.nm
+                                WHERE movie.tt = %s
+                            ''', [movie_id])
+                            movie_data = curs.fetchone()
 
             if not updated:
-                return redirect(url_for('update_movie', movie_id=movie_id)) 
+                return render_template(
+                    'update.html',
+                    page_title='Update Movie Details',
+                    movie=movie_data
+                )
 
-            flash('Movie updated successfully') 
-            return redirect(url_for('update_movie', movie_id=new_tt)) 
+            flash('Movie updated successfully')
+
+            if new_tt != movie_id:
+                return redirect(url_for('update_movie', movie_id=new_tt))
 
     return render_template('update.html', page_title='Update Movie Details', movie=movie_data)
 

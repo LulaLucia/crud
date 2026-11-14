@@ -17,6 +17,8 @@
 
 </form>
 
+<br><br>
+
 {%if search_text %}
 {% for movie in results %} 
 
@@ -27,6 +29,7 @@
          <p>Added by: {{ movie.addedby }} </p>
        <p>Director ID: {{movie.director}} </p>
        <p>Director Name: {{movie.name}} </p>
+       <br>
 
        {%else%}
        <p> Movie not found </p>
