@@ -1,13 +1,20 @@
+<!-- 
+ Lula & Cami
+ CS304 CRUD assignment
+ creates form to update movie details
+ -->
+
 {% extends "base.html" %}
 
-
 {% block main_content %}
+
 <h1>Update Movie</h1>
 
-
-
+<!-- form for either deleting a movie, or updating it's details
+    all details are modifiable except director-name,
+    which is linked to person.name and displayed through sql joins later
+-->
 <div class="box">
-<!-- change to post later -->
 <form action="{{url_for('update_movie', movie_id = movie.tt)}}" method="POST">
 
 <label for="kind">Use "None" or "null" to set a field to null. Only Title, Release Year, and Director can be null.</label>
@@ -23,7 +30,7 @@
 <p><label>Release Year: 
     <input type="text" name="movie-release" value = "{{movie.release if movie else ''}}" ></label></p>
 
-<p><label>Added by: 
+<p><label>Added By: 
     <input type="text" name="movie-addedby" value = "{{movie.addedby if movie else 'None'}}" 
     required></label></p>
 
@@ -37,7 +44,5 @@
 
 </form>
 </div>
-
-
 
 {% endblock %}

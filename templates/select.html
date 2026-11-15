@@ -1,13 +1,20 @@
+<!-- 
+ Lula & Cami
+ CS304 CRUD assignment
+ creates form to select from incomplete movies
+ -->
+
 {% extends "base.html" %}
 
 {% block main_content %}
-<h1>Select Movies</h1>
 
+<h1>Select Movies</h1>
 <br>
 
-<div class="box">
-<!-- change to post later
+<!-- 
+create a dropdown form for users to select incomplete movies from dropdown
 -->
+<div class="box">
 <form action="{{ url_for('select_incomplete_movies') }}" method="POST">
 
     <label for = "dropdown">Movies without release dates or directors: </label>
@@ -15,7 +22,7 @@
     <select id="dropdown" name="menu-tt">
         <option value="">Choose an incomplete movie:</option>
 
-    
+    <!-- list incomplete movies by title as dropdown options -->
     {% for movie in incomplete_movies %}
         <option value="{{ movie.tt }}">{{ movie.title }}</option>
     {% endfor %}
@@ -26,7 +33,6 @@
 
 </form>
 </div>
-
 
 {% endblock %}
 

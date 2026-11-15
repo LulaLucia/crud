@@ -1,29 +1,42 @@
+<!-- 
+ Lula & Cami
+ CS304 CRUD assignment
+ creates form to insert movies
+ -->
+
 {% extends "base.html" %}
 
-
 {% block main_content %}
-<h1>Insert Movie</h1>
 
+<h1>Insert Movie</h1>
 
 <br>
 
+<!-- 
+create stylized form for inserting a movie
+given its id (movie-tt), title (movie-title), and release year (movie-release)
+-->
 <div class="box">
-<!-- change to post later -->
+
 <form action="{{url_for('insert_movie')}}" method= "post">
 
 <label for="kind">Movie Data</label>
+<br>
 
 <p> 
 <label for= "movie-tt"> (i) Movie ID/TT: </label>
 <input type="number" id="movie-tt" name="movie-tt">
 </p>
-<label for="movie-title">(t) Movie Title: </label>
-<input type="text" id="movie-title" name="movie-title" >
 
 <p>
-<label for= "movie-release"> (r) Movie Release Year:</label> 
-<input type="number" id="movie-release" name="movie-release" > </p>
+<label for="movie-title">(t) Movie Title: </label>
+<input type="text" id="movie-title" name="movie-title">
+</p>
 
+<p>
+<label for= "movie-release">(r) Movie Release Year: </label> 
+<input type="number" id="movie-release" name="movie-release">
+</p>
 
 <input type="submit" name= "submit" value= "Insert" >   
 

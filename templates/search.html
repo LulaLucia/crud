@@ -1,43 +1,55 @@
+<!-- 
+ Lula & Cami
+ CS304 CRUD assignment
+ creates form to search for movies
+ -->
 
 {% extends "base.html" %}
 
-
 {% block main_content %}
+
 <h1>Search by Title</h1>
+
 <h4>This page is just to search for movies, since it was not required for the
   assignment, but we thought it would be fun to have just a simple search bar 
-  that delivers current results without an update page
+  that delivers current results without an update page.
 </h4>
 
+<p>This was also helpful for us to test whether our update form works correctly!</p>
+
+<br>
+
+<!-- form to look up movies by title -->
 <form action= "{{url_for('search_by_title', search_text = search_text)}}" method="GET" >
 
-<label>Title <input type="text" id="search-title" name="search-title" required></label>
-
- <input type="submit" name= "submit" value= "Search" >   
+  <label>Title <input type="text" id="search-title" name="search-title" required></label>
+  <input type="submit" name= "submit" value= "Search" >   
 
 </form>
 
 <br><br>
 
-{%if search_text %}
+<!-- 
+display movie results
+matches search term with titles, can be 1< results
+-->
+{% if search_text %}
 {% for movie in results %} 
+    
+      <p>Title: {{movie.title}}</p>
+      <p>Movie Id: {{ movie.tt}} </p>
+      <p>Release year: {{ movie.release }} </p>
+      <p>Added by: {{ movie.addedby }} </p>
+      <p>Director ID: {{movie.director}} </p>
+      <p>Director Name: {{movie.name}} </p>
 
-      
-      <p> Title: {{movie.title}}</p>
-       <p>Movie Id: {{ movie.tt}} </p>
-        <p>Release year: {{ movie.release }} </p>
-         <p>Added by: {{ movie.addedby }} </p>
-       <p>Director ID: {{movie.director}} </p>
-       <p>Director Name: {{movie.name}} </p>
-       <br>
+      <br>
 
-       {%else%}
-       <p> Movie not found </p>
-  {% endfor %}
-   
+<!-- warn user if no movie titles match search term -->
+{%else%}
+       <p> No results found </p>
 
+{% endfor %}   
 {%endif%}      
-
-
 
 {% endblock %}
