@@ -1,3 +1,8 @@
+#Authors: Lula and Cami
+#Date: Octomber, 2026
+#Note 1: All HTML pages passed the WAVE validator with no errors or alerts
+#Note 2: All HTML pages passed the HTML validator
+
 from flask import (Flask, render_template, make_response, url_for, request,
                    redirect, flash, session, send_from_directory, jsonify)
 from werkzeug.utils import secure_filename
@@ -16,21 +21,23 @@ app.secret_key = secrets.token_hex()
 # For CRUD and Ajax, use your personal db
 # For project work, use your team db
 
-print(dbi.conf('ll118_db'))
+print(dbi.conf('cm118_db'))
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+#route for index page
 @app.route('/')
 def index():
     return render_template('main.html', page_title='Main Page')
 
+#route for about page
 @app.route('/about/')
 def about():
     flash('this is a flashed message')
     return render_template('about.html', page_title='About Us')
 
-
+#route for search page
 @app.route('/search/', methods=['GET'])
 def search_by_title():
     '''returns search results for the title that was searched'''
@@ -42,7 +49,7 @@ def search_by_title():
                            results=movie_results, search_text= search)
     
 
-
+#route for insert page
 @app.route('/insert/', methods= ['GET', 'POST'])
 def insert_movie():
     '''inserts a new movie row into the movie table with the movie's
@@ -84,6 +91,7 @@ def insert_movie():
     return render_template('insert.html', page_title='Insert Movie', 
                            id=id, title=title, year= year)
 
+#route for select page
 
 @app.route('/select/', methods = ['GET', 'POST'])
 def select_incomplete_movies():
@@ -101,7 +109,7 @@ def select_incomplete_movies():
                            page_title='Select from Incomplete Movies', 
                            incomplete_movies=incomplete_movies)
 
-
+#route for update page
 @app.route('/update/<int:movie_id>', methods= ['GET', 'POST'])
 def update_movie(movie_id):
     '''displays a movie's current information in a form
@@ -123,6 +131,7 @@ def update_movie(movie_id):
                             flash(f"Movie with tt = {movie_id} does not exist")
                             return redirect(url_for('insert_movie'))
 
+    #once the user submits the form, we check whether they click on submit or delete
     if request.method == 'POST':
         action = request.form.get('submit')
 
@@ -134,7 +143,7 @@ def update_movie(movie_id):
                   flash(f'Movie "{deleted_title}" deleted succesfully')
                   return redirect(url_for('index'))
 
-        
+       
         elif action == 'update':
             '''updates a movie's details'''
             new_title = request.form.get('movie-title')
@@ -143,7 +152,7 @@ def update_movie(movie_id):
             new_addedby = request.form.get('movie-addedby')
             new_director = request.form.get('movie-director')
             new_tt = int(request.form.get('movie-tt'))
-
+             #if user chose to update a movie, we check that the movie tt doesn't already exist 
             with dbi.connect() as conn:
                 if new_tt != movie_id and query.check_movie_exists(conn, new_tt):
                     '''flashes message and re-renders page if user attempts to update

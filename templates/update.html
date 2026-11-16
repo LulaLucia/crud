@@ -17,9 +17,9 @@
 <div class="box">
 <form action="{{url_for('update_movie', movie_id = movie.tt)}}" method="POST">
 
-<label for="kind">Use "None" or "null" to set a field to null. Only Title, Release Year, and Director can be null.</label>
+<p>Use "None" or "null" to set a field to null. Only Title, Release Year, and Director can be null</p>
 
-<p>
+
     <label>Title: 
         <input type="text" name="movie-title" value = "{{movie.title if movie else ''}}" >
     </label> </p>

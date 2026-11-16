@@ -10,9 +10,17 @@
 
 */
 
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh; 
+    background: linear-gradient(180deg, #fff5f9 0%, #ffd6e8 100%);
+    color: #1a1a1a;   
+}
+
 HTML {
-    --color-header: #0073e6;  /* for H1-H6 and nav buttons. */
-    --color-focus: #5ba300;   /* for focussed elements and mouseover on nav */
+    --color-header: #a4279c;  /* for H1-H6 and nav buttons. */
+    --color-focus: #abca44;   /* for focussed elements and mouseover on nav */
     --color-alert: #b51963;   /* for flashed messages and such. */
     --color-nav-fg: white;    /* foreground color of nav text. */
     --font-family: Verdana;
@@ -40,12 +48,15 @@ h1 {
 nav > ul {
     display: flex;
     flex-direction: row;
+    gap: 12px; 
+    
 }
 
 nav ul {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+
 }
 
 nav > ul > li {
@@ -86,4 +97,13 @@ nav button:hover, button:focus, nav a:hover, nav a:focus {
     background-color: var(--color-focus);
 }
 
-.box { width: 400px; border: 1px solid #000; padding: 10px; }
+.box { 
+    width: 600px;               
+    max-width: 100%;         
+    background: linear-gradient(135deg, #ffe0ef 0%, #ff99cc 100%);
+    border: 2px solid var(--color-alert);
+    border-radius: 8px;
+    padding: 20px 32px;        
+    color: #000000;
+    box-shadow: 0 4px 10px rgba(181, 25, 99, 0.15);
+}
